@@ -37,7 +37,7 @@ const Navbar = () => {
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
                     <div className="flex-shrink-0 text-2xl font-bold text-[#6A38C2]">
-                        Job<span className="text-[#F83002]">Portal</span>
+                        Smart<span className="text-[#F83002]">Recruitment</span>
                     </div>
 
                     {/* Desktop Links */}
@@ -54,6 +54,9 @@ const Navbar = () => {
                                     <li><Link to="/jobs">Jobs</Link></li>
                                     <li><Link to="/browse">Browse</Link></li>
                                     <li><Link to="/resumeBuilder">ResumeBuilder</Link></li>
+                                    <li><Link to="/dashboard">Interview</Link></li>
+                                    <Link to="/saved-jobs" className="hover:underline">Saved Jobs</Link>
+
                                 </>
                             )}
                         </ul>

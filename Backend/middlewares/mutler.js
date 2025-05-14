@@ -7,4 +7,4 @@ export const uploadFiles = multer({ storage }).fields([
   ]);
 
 
-  export const singleUpload = multer({ storage }).single('file'); 
+  export const singleUpload = multer({ storage }).single('file');
