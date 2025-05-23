@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
-  "scripts": {
-    "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Gopika Pamisetty",
   "license": "ISC",
   "description": "",
+  "scripts": {
+    "start": "node index.js",
+    "build": "npm install --prefix ../Frontend && npm run build --prefix ../Frontend",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "@google/generative-ai": "^0.24.0",
     "@react-pdf-viewer/core": "^3.12.0",

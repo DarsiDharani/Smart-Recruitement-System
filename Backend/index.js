@@ -6,13 +6,12 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import connectDB from "./utils/db.js";
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import path from "path";
+import { fileURLToPath } from 'url';
 
-// Import Routes
-import userRoute from "./routes/userRoute.js";
-import companyRoute from "./routes/companyRoute.js";
-import jobRoute from "./routes/jobRoute.js";
-import applicationRoute from "./routes/applicationRoute.js";
-
+// ES Module path setup
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load env
 dotenv.config();
@@ -26,8 +25,6 @@ connectDB();
 
 // Middleware
 app.use(helmet());
-
-
 app.use(cors({
     origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
     credentials: true
@@ -38,15 +35,17 @@ app.use(cookieParser());
 app.use('/api/', rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
 // Routes
+import userRoute from "./routes/userRoute.js";
+import companyRoute from "./routes/companyRoute.js";
+import jobRoute from "./routes/jobRoute.js";
+import applicationRoute from "./routes/applicationRoute.js";
+
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 
-
-
-
-// Gemini AI
+// Gemini AI routes
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 app.post('/api/mock-interview', async (req, res) => {
@@ -74,7 +73,6 @@ app.post('/api/mock-interview', async (req, res) => {
 app.post('/api/get-feedback', async (req, res) => {
     try {
         const { responses, role, experience } = req.body;
-
         if (!responses || !role || !experience) {
             return res.status(400).json({ error: "Missing required fields" });
         }
@@ -108,6 +106,18 @@ app.post('/api/get-feedback', async (req, res) => {
         res.status(500).json({ error: error.message || "Feedback generation failed" });
     }
 });
+
+// Serve React frontend (PRODUCTION)
+
+if (process.env.NODE_ENV === 'production') {
+    const clientBuildPath = path.join(__dirname, '../Frontend/build');
+    app.use(express.static(clientBuildPath));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(clientBuildPath, 'index.html'));
+    });
+}
+
 
 // Health Check
 app.get("/", (req, res) => res.send("🚀 Backend is live"));
